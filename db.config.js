@@ -27,5 +27,5 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.hastane = require('./model/hastane.model')(sequelize, Sequelize);
-
+db.doktor = require('./model/doktor.model')(sequelize, Sequelize);
 module.exports = db
