@@ -13,18 +13,18 @@ exports.addHastane = (req, res) => {
         }
     }).then(response => {
         if (response.length > 0) {
-            return { status: "error", description: "Kayıt var" }
+            res.status(500).json({ status: "error", description: "Kayıt var" })
         }
         else {
             return Hastane.create({ ad }).then(created => {
                 if (created) {
-                    return { status: "success" }
+                    res.status(200).json({ status: "success" })
                 }
                 else {
                     return { status: "error", description: "Hata" }
                 }
             }).catch(err => {
-                console.log(err)
+                res.status(500).json({ status: "success" })
                 throw new Error()
             })
         }
@@ -32,15 +32,12 @@ exports.addHastane = (req, res) => {
 }
 
 exports.getHastane = (req, res) => {
-    let body = req.body
-    let { ad = null } = body
-
     return Hastane.findAll().then(response => {
         if (response.length > 0) {
-            return { status: "success", hastanes: response }
+            res.status(200).send({ status: "success", hastanes: response })
         }
         else {
-            return { status: "success", hastanes: [] }
+            res.status(200).send({ status: "success", hastanes: [] })
         }
     })
 }
@@ -56,9 +53,9 @@ exports.updateHastane = (req, res) => {
     }).then(response => {
         return response.update({ ad }).then(updated => {
             if (updated) {
-                return { status: "success" }
+                res.status(200).json({ status: "success" })
             }
-            return { status: "error" }
+            res.status(500)
         })
     })
 }
