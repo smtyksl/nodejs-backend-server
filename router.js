@@ -3,27 +3,34 @@ let hastaneControlleer = require("./controller/Hastane")
 let doktorController = require("./controller/Doktor")
 let doktorhastaneController = require("./controller/DoktorHastane")
 
-module.exports = function (app, io) {
+module.exports = function (app) {
     app.use(function (req, res, next) {
-        req.io = io;
         next();
     });
 
-    app.post('/get-hastane', hastaneControlleer.getHastane);
+    app.post('/api/get-hastane', hastaneControlleer.getHastane);
 
-    app.post('/add-hastane', hastaneControlleer.addHastane);
+    app.post('/api/add-hastane', hastaneControlleer.addHastane);
 
-    app.post('/update-hastane', hastaneControlleer.updateHastane);
+     app.post('/api/update-hastane', hastaneControlleer.updateHastane);
 
-    app.post('/get-doktor', doktorController.getDoktor);
+     app.post('/api/get-doktor', doktorController.getDoktor);
 
-    app.post('/add-doktor', doktorController.addDoktor);
+     app.post('/api/add-doktor', doktorController.addDoktor);
 
-    app.post('/update-doktor', doktorController.updateDoktor);
+     app.post('/api/update-doktor', doktorController.updateDoktor);
 
-    app.post('/get-doktor', doktorhastaneController.getDoktorHastane);
+     app.post('/api/get-doktor', doktorhastaneController.getDoktorHastane);
 
-    app.post('/add-doktor', doktorhastaneController.addDoktorHastane);
+     app.post('/api/add-doktor', doktorhastaneController.addDoktorHastane);
 
-    app.post('/update-doktor', doktorhastaneController.updateDoktorHastane);
+     app.post('/api/update-doktor', doktorhastaneController.updateDoktorHastane);
+
+    app.use(function (err, req, res, next) {//Error Controller
+        console.error(err)
+        res.status(500).send({
+            "description": "Error",
+            "error": "Error occured"
+        });
+    });
 }

@@ -1,7 +1,7 @@
 const db = require('../db.config.js')
 const Doktor = db.doktor
 
-const Op = db.Sequelize.Op; // 
+const Op = db.Sequelize.Op; // anlatıkacak
 
 exports.addDoktor = (req, res) => {
     let body = req.body
@@ -13,18 +13,18 @@ exports.addDoktor = (req, res) => {
         }
     }).then(response => {
         if (response.length > 0) {
-            return { status: "error", description: "Kayıt var" }
+            res.status(500).json({ status: "error", description: "Kayıt var" })
         }
         else {
             return Doktor.create({ ad }).then(created => {
                 if (created) {
-                    return { status: "success" }
+                    res.status(200).json({ status: "success" })
                 }
                 else {
                     return { status: "error", description: "Hata" }
                 }
             }).catch(err => {
-                console.log(err)
+                res.status(500).json({ status: "success" })
                 throw new Error()
             })
         }
@@ -32,15 +32,12 @@ exports.addDoktor = (req, res) => {
 }
 
 exports.getDoktor = (req, res) => {
-    let body = req.body
-    let { ad = null } = body
-
     return Doktor.findAll().then(response => {
         if (response.length > 0) {
-            return { status: "success", doktors: response }
+            res.status(200).send({ status: "success", doktors: response })
         }
         else {
-            return { status: "success", doktors: [] }
+            res.status(200).send({ status: "success", doktors: [] })
         }
     })
 }
@@ -56,9 +53,9 @@ exports.updateDoktor = (req, res) => {
     }).then(response => {
         return response.update({ ad }).then(updated => {
             if (updated) {
-                return { status: "success" }
+                res.status(200).json({ status: "success" })
             }
-            return { status: "error" }
+            res.status(500)
         })
     })
 }
