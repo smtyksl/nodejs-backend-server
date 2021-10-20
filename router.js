@@ -20,11 +20,11 @@ module.exports = function (app) {
 
      app.post('/api/update-doktor', doktorController.updateDoktor);
 
-     app.post('/api/get-doktor', doktorhastaneController.getDoktorHastane);
+     app.post('/api/get-doktor-hastane', doktorhastaneController.getDoktorHastane);
 
-     app.post('/api/add-doktor', doktorhastaneController.addDoktorHastane);
+     app.post('/api/add-doktor-hastane', doktorhastaneController.addDoktorHastane);
 
-     app.post('/api/update-doktor', doktorhastaneController.updateDoktorHastane);
+     app.post('/api/update-doktor-hastane', doktorhastaneController.updateDoktorHastane);
 
     app.use(function (err, req, res, next) {//Error Controller
         console.error(err)

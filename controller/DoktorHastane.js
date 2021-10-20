@@ -1,30 +1,34 @@
 const db = require('../db.config.js')
-const DoktorHastane = db.DoktorHastane
+const DoktorHastane = db.doktorhastane
 
 const Op = db.Sequelize.Op; // anlatıkacak
 
 exports.addDoktorHastane = (req, res) => {
     let body = req.body
-    let { ad = null } = body
+    let doktorid = body.doktorid
+    let hastaneid = body.hastaneid
 
+
+    let { doktorhastane = null } = body
     return DoktorHastane.findAll({
-        where: {
-            ad: ad
+        where: { 
+           doktorid ,
+           hastaneid 
         }
     }).then(response => {
         if (response.length > 0) {
-            return { status: "error", description: "Kayıt var" }
+            res.status(500).json({ status: "error", description: "Kayıt var" })
         }
         else {
-            return DoktorHastane.create({ ad }).then(created => {
+            return DoktorHastane.create({   doktorid , hastaneid  }).then(created => {
                 if (created) {
-                    return { status: "success" }
+                    res.status(200).json({ status: "success" })
                 }
                 else {
                     return { status: "error", description: "Hata" }
                 }
             }).catch(err => {
-                console.log(err)
+                res.status(500).json({ status: "success" })
                 throw new Error()
             })
         }
@@ -32,15 +36,12 @@ exports.addDoktorHastane = (req, res) => {
 }
 
 exports.getDoktorHastane = (req, res) => {
-    let body = req.body
-    let { ad = null } = body
-
     return DoktorHastane.findAll().then(response => {
         if (response.length > 0) {
-            return { status: "success", doktorhastanes: response }
+            res.status(200).send({ status: "success", doktorhastanes: response })
         }
         else {
-            return { status: "success", doktorhastanes: [] }
+            res.status(200).send({ status: "success", doktorhastanes: [] })
         }
     })
 }
@@ -56,9 +57,9 @@ exports.updateDoktorHastane = (req, res) => {
     }).then(response => {
         return response.update({ ad }).then(updated => {
             if (updated) {
-                return { status: "success" }
+                res.status(200).json({ status: "success" })
             }
-            return { status: "error" }
+            res.status(500)
         })
     })
 }
